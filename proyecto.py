@@ -2,7 +2,7 @@
 Proyecto final para la clase de Estructura de Datos I
 '''
 
-from binarytree import Node,tree,build
+from binarytree import tree,build
 
 #Menu principal
 def menu():
@@ -94,10 +94,10 @@ def arboles():
     return value
 
 def crear_arbol():
-    print ("En este programa te brindamos 3 opciones para crear arboles, elige la que mas se adapte a tu objetivo")
+    print ("En este programa te brindamos 2 opciones para crear arboles, elige la que mas se adapte a tu objetivo")
     
     try:
-        crear=int(input("1. Crear un arbol de manera aleatoria\n2. Introducir los datos en forma de arreglo\n3. Introducir los datos en orden"))
+        crear=int(input("1. Crear un arbol de manera aleatoria\n2. Introducir los datos en forma de arreglo\n"))
     except:
         print("Valor Invalido")
     
@@ -123,17 +123,39 @@ def crear_arbol():
     elif crear==2:
         print("Excelente! Tu arbol sera generado en base a un arreglo. Solo necesitamos recibir los valores")
         valores=[]
-        valor=0
+        counter=0
         print("Introduce los valores en orden. El valor inicial sera considerado la raiz. Los valores se ordenaran de izquiera a derecha." +
         "Deja el valor en blanco para saltar ese espacio. Escribe -1 para dejar de añadir valores")
-        # while valor!=-1:
+        valor=" "
+        while valor!="-1":
+            valor=input(f"Introduzca el valor {counter}: ")
+            if valor=="":
+                valor=None
+                valores.append(valor)
+                counter+=1
+            else:
+                valores.append(int(valor))
+                counter+=1
+        valores.pop()
+        root=build(valores)
+        return root
 
-        #     if valor=" ":
-        #         valor=None
-        #     else:
-
-
-
+def recorrido(arbol,numero):
+    while True:
+        if numero==2:
+            print("Con gusto! Estos son los valores de tu recorrido Preorden")
+            print(arbol)
+            return arbol.preorder
+        elif numero==3:
+            print("Con gusto! Estos son los valores de tu recorrido PostOrden")
+            print(arbol)
+            return arbol.postorder
+        elif numero==4:
+            print("Con gusto! Estos son los valores de tu recorrido Inorder")
+            print(arbol)
+            return arbol.inorder
+        elif numero==5:
+            return "Hemos terminado con la seccion de arboles"
 
 #Listas Enlazadas
 
@@ -144,163 +166,157 @@ if __name__=="__main__":
     pilas=[]
     colas=[]
     listas=[]
-    trabajo='' 
-    opc=menu()
+    trabajo=''
+    arbol="" 
+    
 
-    while opc!=5: 
-        if opc==1:
-            print("Bienvenido a la seccion de pilas")  
-            if len(pilas)>=1:
-                print("Las pilas creadas son las siguientes: ")
-                for pila in pilas:
-                    print(pila.name)
-                trabajo=input("\nSelecciona el nombre de la pila con la que deseas trabajar, escribe q para salir o n para crear una nueva: ")
-                if trabajo.lower()=="n":
+    while True:
+        opc=menu()
+        while opc!=5:
+            if opc==1:
+                print("Bienvenido a la seccion de pilas")  
+                if len(pilas)>=1:
+                    print("Las pilas creadas son las siguientes: ")
+                    for pila in pilas:
+                        print(pila.name)
+                    trabajo=input("\nSelecciona el nombre de la pila con la que deseas trabajar, escribe q para salir o n para crear una nueva: ")
+                    if trabajo.lower()=="n":
+                        nombre=input("\nIntroduzca un nombre para crear una pila: ")
+                        pila=Pila(nombre)
+                        pilas.append(pila)
+                        print("Pila Creada Satisfactoriamente!")
+                        trabajo=pila
+                        print(f"Ahora trabajaras con la pila: {trabajo.name} ")
+                    elif trabajo.lower()=="q":
+                        break
+                    else: 
+                        trabajo=EnLista(pilas,trabajo)
+    
+                else:
+                    print("\nActualmente en nuestro sistema no hay ninguna pila")
                     nombre=input("\nIntroduzca un nombre para crear una pila: ")
                     pila=Pila(nombre)
                     pilas.append(pila)
                     print("Pila Creada Satisfactoriamente!")
                     trabajo=pila
                     print(f"Ahora trabajaras con la pila: {trabajo.name} ")
-                elif trabajo.lower()=="q":
-                    break
-                else: 
-                    trabajo=EnLista(pilas,trabajo)
- 
-            else:
-                print("\nActualmente en nuestro sistema no hay ninguna pila")
-                nombre=input("\nIntroduzca un nombre para crear una pila: ")
-                pila=Pila(nombre)
-                pilas.append(pila)
-                print("Pila Creada Satisfactoriamente!")
-                trabajo=pila
-                print(f"Ahora trabajaras con la pila: {trabajo.name} ")
 
-            while True:     
-                accion=menuPilas()
-                            
-                if accion==1:
-                    continuar=""
-                    while True:
-                        valor=input(f"Introduzca el valor alfanumerico que desea añadir a la pila {trabajo.name}: ")
-                        trabajo.insertar(valor)
-                        continuar=input("Desea Insertar otro valor? (si/no): ")
-                        if continuar.lower()=="si":
-                            continue
-                        else:
-                            break
+                while True:     
+                    accion=menuPilas()
+                                
+                    if accion==1:
+                        continuar=""
+                        while True:
+                            valor=input(f"Introduzca el valor alfanumerico que desea añadir a la pila {trabajo.name}: ")
+                            trabajo.insertar(valor)
+                            continuar=input("Desea Insertar otro valor? (si/no): ")
+                            if continuar.lower()=="si":
+                                continue
+                            else:
+                                break
 
-                elif accion==2:
-                    while True:
-                        trabajo.extraer()
-                        continuar=input("Desea Extraer otro valor? (si/no): ")
-                        if continuar.lower()=="si":
-                            continue
-                        else:
-                            break
+                    elif accion==2:
+                        while True:
+                            trabajo.extraer()
+                            continuar=input("Desea Extraer otro valor? (si/no): ")
+                            if continuar.lower()=="si":
+                                continue
+                            else:
+                                break
 
-                elif accion==3:
-                    print("Tu Pila esta compuesta de los siguientes elementos: ")
-                    trabajo.visualizar()
-                            
-                elif accion==4:
-                    print(f"Ha concluido el uso de la pila {trabajo.name}")
-                    break
+                    elif accion==3:
+                        print("Tu Pila esta compuesta de los siguientes elementos: ")
+                        trabajo.visualizar()
+                                
+                    elif accion==4:
+                        print(f"Ha concluido el uso de la pila {trabajo.name}")
+                        break
 
+                    else:
+                        print("\nOpcion no valida")
+
+            elif opc==2:
+                print("Bienvenido a la seccion de colas")  
+                if len(colas)>=1:
+                    print("Las colas creadas son las siguientes: ")
+                    for cola in colas:
+                        print(cola.name)
+                    trabajo=input("\nSelecciona el nombre de la cola con la que deseas trabajar, tambien puedes escribir q para salir o n para crear una nueva: ")
+                    if trabajo.lower()=="n":
+                        nombre=input("\nIntroduzca un nombre para crear una cola: ")
+                        cola=Cola(nombre)
+                        colas.append(cola)
+                        print("Cola Creada Satisfactoriamente!")
+                        trabajo=cola
+                        print(f"Ahora trabajaras con la cola: {trabajo.name} ")
+                    elif trabajo.lower()=="q":
+                        break
+                    else: 
+                        trabajo=EnLista(colas,trabajo)
+    
                 else:
-                    print("\nOpcion no valida")
-
-        elif opc==2:
-            print("Bienvenido a la seccion de colas")  
-            if len(colas)>=1:
-                print("Las colas creadas son las siguientes: ")
-                for cola in colas:
-                    print(cola.name)
-                trabajo=input("\nSelecciona el nombre de la cola con la que deseas trabajar, tambien puedes escribir q para salir o n para crear una nueva: ")
-                if trabajo.lower()=="n":
+                    print("\nActualmente en nuestro sistema no hay ninguna cola")
                     nombre=input("\nIntroduzca un nombre para crear una cola: ")
                     cola=Cola(nombre)
                     colas.append(cola)
                     print("Cola Creada Satisfactoriamente!")
                     trabajo=cola
                     print(f"Ahora trabajaras con la cola: {trabajo.name} ")
-                elif trabajo.lower()=="q":
-                    break
-                else: 
-                    trabajo=EnLista(colas,trabajo)
- 
-            else:
-                print("\nActualmente en nuestro sistema no hay ninguna cola")
-                nombre=input("\nIntroduzca un nombre para crear una cola: ")
-                cola=Cola(nombre)
-                colas.append(cola)
-                print("Cola Creada Satisfactoriamente!")
-                trabajo=cola
-                print(f"Ahora trabajaras con la cola: {trabajo.name} ")
 
-            while True:     
-                accion=menuPilas()
-                            
+                while True:     
+                    accion=menuPilas()
+                                
+                    if accion==1:
+                        continuar=""
+                        while True:
+                            valor=input(f"Introduzca el valor alfanumerico que desea añadir a la cola {trabajo.name}: ")
+                            trabajo.insertar(valor)
+                            continuar=input("Desea Insertar otro valor? (si/no): ")
+                            if continuar.lower()=="si":
+                                continue
+                            else:
+                                break
+
+                    elif accion==2:
+                        while True:
+                            trabajo.extraer()
+                            continuar=input("Desea Extraer otro valor? (si/no): ")
+                            if continuar.lower()=="si":
+                                continue
+                            else:
+                                break
+
+                    elif accion==3:
+                        print("Tu Cola esta compuesta de los siguientes elementos: ")
+                        trabajo.visualizar()
+                                
+                    elif accion==4:
+                        print(f"Ha concluido el uso de la cola {trabajo.name}")
+                        break
+
+                    else:
+                        print("\nOpcion no valida")
+            
+            elif opc==3:
+                print("Bienvenido al sistema de Arboles!")
+                accion=arboles()
                 if accion==1:
-                    continuar=""
-                    while True:
-                        valor=input(f"Introduzca el valor alfanumerico que desea añadir a la cola {trabajo.name}: ")
-                        trabajo.insertar(valor)
-                        continuar=input("Desea Insertar otro valor? (si/no): ")
-                        if continuar.lower()=="si":
-                            continue
-                        else:
-                            break
+                    arbol=crear_arbol()
+                    print(arbol)
+                elif opc in range (2,6):
+                    if accion==5:
+                        print(recorrido(arbol,accion))
+                        break
+                    if arbol!="":
+                        print(recorrido(arbol,accion))
+                    else:
+                        print("No se ha creado ningun arbol. Creemos uno")
+                        arbol=crear_arbol()
+                        print(recorrido(arbol,accion))
 
-                elif accion==2:
-                    while True:
-                        trabajo.extraer()
-                        continuar=input("Desea Extraer otro valor? (si/no): ")
-                        if continuar.lower()=="si":
-                            continue
-                        else:
-                            break
-
-                elif accion==3:
-                    print("Tu Cola esta compuesta de los siguientes elementos: ")
-                    trabajo.visualizar()
-                            
-                elif accion==4:
-                    print(f"Ha concluido el uso de la cola {trabajo.name}")
-                    break
-
-                else:
-                    print("\nOpcion no valida")
-        
-        elif opc==3:
-            print("Bienvenido al sistema de Arboles!")
-            accion=arboles()
-            if accion==1:
-                arbol=crear_arbol()
-                print(arbol)
-            
-                
-            
-
-    #     elif opc==3:
-    #         print("Bienvenido a la seccion de arboles binarios!") 
-
-    #         root=Node(23)
-    #         root.left=Node(16)
-    #         root.right=Node(40)
-    #         root.left.left=Node(15)
-    #         root.left.right=Node(63)
-    #         print(root)
-    #         print(root.inorder)
-        
-    #     elif opc==4:
-    #         print("Listas Enlazadas")
-        
-    #     else:
-    #         print("¡Ese Numero no se encuentra dentro de las opciones permitidas!")
-    #         opc=menu()
-    
-    # print("¡Gracias por utilizar nuestro programa!")
+        if opc==5:
+            print("Gracias por utilizar nuestro Programa!")
+            break
 
 
 
